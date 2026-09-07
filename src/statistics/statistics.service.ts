@@ -35,7 +35,7 @@ export interface StatisticsSummary {
 }
 
 @Injectable()
-export class StatsService {
+export class StatisticsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getDashboardSummary(userId: string): Promise<DashboardSummary> {

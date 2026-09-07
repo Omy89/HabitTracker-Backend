@@ -8,6 +8,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 import { HabitsService } from './habits.service';
 import { HabitDto } from './dto/habit.dto';
 import { ProgressDto } from './dto/progress.dto';
@@ -15,6 +16,8 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CurrentUser } from '../auth/current-user.decorator';
 import type { Session } from '../auth/session.interface';
 
+@ApiTags('habits')
+@ApiCookieAuth()
 @Controller('habits')
 @UseGuards(JwtAuthGuard)
 export class HabitsController {

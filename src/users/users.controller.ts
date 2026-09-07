@@ -1,4 +1,5 @@
 import { Body, Controller, Patch, Res, UseGuards } from '@nestjs/common';
+import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 import type { Response } from 'express';
 import { UsersService } from './users.service';
 import { UpdateProfileDto } from './dto/update-profile.dto';
@@ -9,6 +10,8 @@ import { AuthService } from '../auth/auth.service';
 import { setSessionCookie } from '../auth/cookie.util';
 import type { Session } from '../auth/session.interface';
 
+@ApiTags('users')
+@ApiCookieAuth()
 @Controller('users')
 @UseGuards(JwtAuthGuard)
 export class UsersController {

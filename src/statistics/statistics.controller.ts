@@ -1,21 +1,24 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import { StatsService } from './stats.service';
+import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
+import { StatisticsService } from './statistics.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CurrentUser } from '../auth/current-user.decorator';
 import type { Session } from '../auth/session.interface';
 
+@ApiTags('statistics')
+@ApiCookieAuth()
 @Controller()
 @UseGuards(JwtAuthGuard)
-export class StatsController {
-  constructor(private readonly statsService: StatsService) {}
+export class StatisticsController {
+  constructor(private readonly statisticsService: StatisticsService) {}
 
   @Get('dashboard')
   getDashboard(@CurrentUser() user: Session) {
-    return this.statsService.getDashboardSummary(user.id);
+    return this.statisticsService.getDashboardSummary(user.id);
   }
 
   @Get('statistics')
   getStatistics(@CurrentUser() user: Session) {
-    return this.statsService.getStatistics(user.id);
+    return this.statisticsService.getStatistics(user.id);
   }
 }
