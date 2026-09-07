@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Category {
+  Health
+  Wellness
+  Study
+  Work
+  Finance
+  General
+}
+
+enum Frequency {
+  Daily
+  Weekly
+  Custom
+}
+
+enum Priority {
+  High
+  Medium
+  Low
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+
+  habits  Habit[]
+  records HabitRecord[]
+}
+
+model Habit {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String    @db.ObjectId
+  name        String
+  description String
+  category    Category
+  frequency   Frequency
+  priority    Priority
+  startDate   String
+  endDate     String
+  active      Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+
+  user    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  records HabitRecord[]
+
+  @@index([userId])
+}
+
+model HabitRecord {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  habitId  String @db.ObjectId
+  userId   String @db.ObjectId
+  date     String
+  progress Int
+
+  habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([habitId, date])
+  @@index([userId])
+}
